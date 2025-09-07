@@ -27,13 +27,13 @@ public class FileReadLogService {
         FileReadLog dataToSave = new FileReadLog();
         dataToSave.setReadDate(new Date());
         if(user == null){
-            this.fileReadLogFailed(input, "Failed - User not found!");
+            this.fileReadLog(input, "Failed - User not found!");
             return Collections.emptyList();
         } else if (!user.getIsCreate()) {
-            this.fileReadLogFailed(input, "Failed - User does not have create permission!");
+            this.fileReadLog(input, "Failed - User does not have create permission!");
             return Collections.emptyList();
         }else if(!input.getFile().getOriginalFilename().endsWith(".xlsx") && !input.getFile().getOriginalFilename().endsWith(".xls")){
-            this.fileReadLogFailed(input, "Failed - Please Upload Excel File (not csv or others)!");
+            this.fileReadLog(input, "Failed - Please Upload Excel File (not csv or others)!");
             return Collections.emptyList();
         }else{
             List<HashMap<String, Object>> results = new ArrayList<>();
@@ -60,12 +60,13 @@ public class FileReadLogService {
                     results.add(map);
                 }
             }
+            this.fileReadLog(input, "Success!");
 
             return results;
         }
     }
 
-    public void fileReadLogFailed(FileReadDTO input, String cause){
+    public void fileReadLog(FileReadDTO input, String cause){
         FileReadLog dataToSave = new FileReadLog();
         dataToSave.setReadDate(new Date());
         dataToSave.setId(UUID.randomUUID());
